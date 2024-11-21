@@ -2,9 +2,12 @@ package co.edu.umanizales.alquiler_carros.service;
 
 import co.edu.umanizales.alquiler_carros.model.Vehiculo;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+
 
 @Service //decorador que declara la clase como un servicio
 public class VehiculoService {
@@ -13,8 +16,8 @@ public class VehiculoService {
     public List<Vehiculo> obtenerVehiculosDisponibles() {
         List<Vehiculo> disponibles = new ArrayList<>();
         for (Vehiculo vehiculo : vehiculos) {
-            if (vehiculo.isDisponible()) { // Verifica si el vehículo está disponible llamando al método isDisponible()
-                disponibles.add(vehiculo); //Si el vehículo está disponible, se agrega a la lista disponibles.
+            if (vehiculo.isDisponible()) {
+                disponibles.add(vehiculo);
             }
         }
         return disponibles;
@@ -27,8 +30,16 @@ public class VehiculoService {
     public boolean eliminarVehiculo(String matricula) {
         return vehiculos.removeIf(vehiculo -> vehiculo.getMatricula().equals(matricula));
     }
-   //Utiliza un predicado (expresión lambda) para buscar y eliminar vehículos de la lista cuyo atributo matricula coincida con el valor proporcionado.
 
-
-    // Métodos para editar, eliminar, activar/desactivar
+    //método para obtener la cantidad de vehículos disponibles por tipo
+    public Map<String, Integer> contarVehiculosDisponiblesPorTipo() {
+        Map<String, Integer> conteoPorTipo = new HashMap<>();
+        for (Vehiculo vehiculo : vehiculos) {
+            if (vehiculo.isDisponible()) {
+                String tipo = vehiculo.getClass().getSimpleName(); // Obtiene el tipo de clase
+                conteoPorTipo.put(tipo, conteoPorTipo.getOrDefault(tipo, 0) + 1);
+            }
+        }
+        return conteoPorTipo;
+    }
 }
